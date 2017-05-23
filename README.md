@@ -102,11 +102,34 @@ if($query->row_count() > 0) {
 }
 ```
 ## Delete Data
+Delete a specific row from a table
 ```php
 $conditions = array(
 	'username' => 'newjohn'
 );
 $db->del('users', $conditions);
+```
+Or delete all rows from a table:
+```php
+$db->del('users');
+```
+## Transactions
+In transactions, you run multiple queries that depend on each other. They either all succeed or fail. If any of the queries is failed, you can rollback the changes so inserted data (that depends on other insertions) can be deleted. Here is an example of a hypothetical transaction for data insertion in two tables `users` and `user_meta`:
+```
+$db->transaction(); // Declare this a transaction
+// Our first query
+$db->insert('users', array('username' => 'john'));
+if($db->row_count() > 0) {
+	$user_id = $db->last_id();
+	$db->insert('user_meta', array('user_id' => $user_id, 'meta_key' => 'user_phone', 'meta_value' => '1234567890'));
+	if($db->row_count()) {
+		$db->commit();
+	} else {
+		$db->roll();
+	}
+} else {
+	$db->roll();
+}
 ```
 
 I hope this is simple enough! You can contribute to the code if you can make it better.
