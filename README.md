@@ -115,7 +115,7 @@ $db->del('users');
 ```
 ## Transactions
 In transactions, you run multiple queries that depend on each other. They either all succeed or fail. If any of the queries is failed, you can rollback the changes so inserted data (that depends on other insertions) can be deleted. Here is an example of a hypothetical transaction for data insertion in two tables `users` and `user_meta`:
-```
+```php
 $db->transaction(); // Declare this a transaction
 // Our first query
 $db->insert('users', array('username' => 'john'));
@@ -123,11 +123,14 @@ if($db->row_count() > 0) {
 	$user_id = $db->last_id();
 	$db->insert('user_meta', array('user_id' => $user_id, 'meta_key' => 'user_phone', 'meta_value' => '1234567890'));
 	if($db->row_count()) {
+		// Commit the query
 		$db->commit();
 	} else {
+		// Roll back the changes
 		$db->roll();
 	}
 } else {
+	// Roll back the changes
 	$db->roll();
 }
 ```
