@@ -39,7 +39,7 @@ $db->query('SELECT * FROM `table_name` WHERE `column_name` = ?', array('column_n
 ```
 A shorcut method to get data from the database (with chaining):
 ```php
-$results = $db->get('table_name', array('column_name' => 'column_value'))->results();
+$results = $db->get('table_name', array('column_name', '=', 'column_value'))->results();
 ```
 Get all results from a table without any conditions:
 ```php
@@ -80,10 +80,7 @@ $db->update('users', $new_data, $conditions);
 ## Get Data
 Get a specific row
 ```php
-$conditions = array(
-	'username' => 'newjohn'
-);
-$query = $db->get('users', $conditions);
+$query = $db->get('users', array('username', '=', 'john'));
 if($query->row_count() > 0) {
 	echo 'Username: ' . $query->row('username') . '<br>';
 } else {
