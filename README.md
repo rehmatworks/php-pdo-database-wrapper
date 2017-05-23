@@ -101,10 +101,7 @@ if($query->row_count() > 0) {
 ## Delete Data
 Delete a specific row from a table
 ```php
-$conditions = array(
-	'username' => 'newjohn'
-);
-$db->del('users', $conditions);
+$db->del('users', array('username', '=', 'john'));
 ```
 Or delete all rows from a table:
 ```php
